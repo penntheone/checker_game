@@ -31,7 +31,7 @@ public class CheckerBoard extends JPanel implements Dimensions {
             this.boardStatus = boardStatus;
             for (int row = 0; row < boardStatus.length; row++) {
                 for (int col = 0; col < boardStatus[row].length; col++) {
-                    if ((row + col) % 2 == 1) {
+                    if ((row + col) % 2 == 0) {
                         if (boardStatus[row][col] != '_') { // White tile cannot have a piece.
                             throw new IllegalCheckerBoardArgumentException("Illegal piece location!");
                         }

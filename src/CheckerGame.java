@@ -1,14 +1,11 @@
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
+import javax.swing.*;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
  *  The GUI constructors and game file's driver. CheckerGame extends JFrame
@@ -74,6 +71,50 @@ public class CheckerGame extends JFrame implements Dimensions {
         exitItem.addActionListener(new MenuActionListener());
         fileMenu.add(exitItem);
 
+        JMenuItem rulesMenu = new JMenuItem("Checker Game Rules");
+        JOptionPane rulesBox = new JOptionPane();
+
+        JLabel rulesTitle = new JLabel(
+                "Helpful Resources");
+        JLabel rulesFirst = new JLabel(
+                "https://www.wikihow.com/Play-Checkers");
+        JLabel rulesSecond = new JLabel(
+                "https://www.youtube.com/watch?v=ScKIdStgAfU");
+
+        rulesFirst.setForeground(Color.BLUE.darker());
+        rulesSecond.setForeground(Color.BLUE.darker());
+        rulesFirst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        rulesSecond.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        rulesFirst.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI(
+                            "https://www.wikihow.com/Play-Checkers"));
+                } catch (IOException | URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
+        rulesSecond.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI(
+                            "https://www.youtube.com/watch?v=ScKIdStgAfU"));
+                } catch (IOException | URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+
+        rulesBox.add(rulesTitle);
+        rulesBox.add(rulesFirst);
+        rulesBox.add(rulesSecond);
+
+
         add(panel);
         setJMenuBar(menubar);
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -91,12 +132,18 @@ public class CheckerGame extends JFrame implements Dimensions {
             String item = e.getActionCommand();
             System.out.println("Action Item = " + item);
 
-            if (item.equals("Exit")) {
-                System.out.println("Exit called.");
-                System.exit(0);
-            } else if (item.equals("New Game")) {
-                System.out.println("New Game button pressed.");
-                board = new CheckerBoard(); // Create a new board.
+            switch (item) {
+                case "Exit" -> {
+                    System.out.println("Exit called.");
+                    System.exit(0);
+                }
+                case "New Game" -> {
+                    System.out.println("New Game button pressed.");
+                    board = new CheckerBoard(); // Create a new board.
+                }
+                case "Checker Game Rules" -> {
+                    
+                }
             }
         }
     }
