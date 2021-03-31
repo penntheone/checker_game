@@ -14,6 +14,7 @@ import java.awt.GridLayout;
  */
 public class CheckerBoard extends JPanel implements Dimensions {
     char[][] boardStatus;
+    CheckerPiece[] pieceHolder;
     boolean isRedTurn;
     int bCount;
     int rCount;
@@ -29,6 +30,8 @@ public class CheckerBoard extends JPanel implements Dimensions {
         try {
             // Instantiating all game elements
             this.boardStatus = boardStatus;
+            pieceHolder = new CheckerPiece[64];
+            setLayout(new GridLayout(8,8));
             for (int row = 0; row < boardStatus.length; row++) {
                 for (int col = 0; col < boardStatus[row].length; col++) {
                     if ((row + col) % 2 == 0) {
@@ -45,8 +48,8 @@ public class CheckerBoard extends JPanel implements Dimensions {
                                 throw new IllegalCheckerBoardArgumentException("Illegal piece location!");
                         }
                     }
-
-                    add(new CheckerPiece(boardStatus[row][col], row, col));
+                    pieceHolder[row * 8 + col] = new CheckerPiece(boardStatus[row][col], row, col);
+                    add(pieceHolder[row * 8 + col], row * 8 + col);
                 }
             }
         } catch (IllegalCheckerBoardArgumentException e) {
@@ -74,7 +77,12 @@ public class CheckerBoard extends JPanel implements Dimensions {
      */
     public void setBoardStatus(char[][] boardStatus) {
         this.boardStatus = boardStatus;
-        repaint();
+        for (int row = 0; row < boardStatus.length; row++) {
+            for (int col = 0; col < boardStatus[row].length; col++) {
+                pieceHolder[row * 8 + col].setPiece(
+                        row, col, boardStatus[row][col]);
+            }
+        }
     }
 
     /**
@@ -85,7 +93,7 @@ public class CheckerBoard extends JPanel implements Dimensions {
      */
     public void setCheckerPiece(int row, int col, char status) {
         boardStatus[row][col] = status;
-        repaint();
+        pieceHolder[row * 8 + col].setPiece(row, col, status);
     }
 
     public static void arrayToString(char[][] input) {

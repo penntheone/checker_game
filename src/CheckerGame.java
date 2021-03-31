@@ -5,7 +5,6 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 /**
  *  The GUI constructors and game file's driver. CheckerGame extends JFrame
@@ -22,6 +21,11 @@ public class CheckerGame extends JFrame implements Dimensions {
     CheckerBoard board;
     boolean firstValidChoice;
     int[][] moveVar;
+    JPanel panel;
+    JPanel statusBoard;
+    JLabel status;
+
+    JDialog rulesBox;
 
     /**
      * Default
@@ -46,15 +50,16 @@ public class CheckerGame extends JFrame implements Dimensions {
 
 
 //        CheckerBoard.arrayToString(board.boardStatus);
-        JPanel panel = new JPanel();
-        JLabel status = new JLabel();
-        JLabel meeeee = new JLabel();
+        panel = new JPanel();
+        statusBoard = new JPanel();
+        status = new JLabel();
+        status.setText("");
 
-        // TODO UI non-functional
-        // TODO Non-responsive clicking
+        JLabel meeeee = new JLabel("Made my Meeeeeeeee.");
+
         panel.add(board);  // TODO Fix the UI drifting
-        panel.add(status); // TODO Write Status
-        panel.add(meeeee); // TODO Write my fucking Name
+        statusBoard.add(status); // TODO Write Status
+        statusBoard.add(meeeee);
         panel.addMouseListener(new MouseClickListener());
 
         JMenuBar menubar = new JMenuBar();
@@ -71,8 +76,11 @@ public class CheckerGame extends JFrame implements Dimensions {
         exitItem.addActionListener(new MenuActionListener());
         fileMenu.add(exitItem);
 
-        JMenuItem rulesMenu = new JMenuItem("Checker Game Rules");
-        JOptionPane rulesBox = new JOptionPane();
+        JMenuItem rulesItem = new JMenuItem("Checker Game Rules");
+        rulesItem.addActionListener(new MenuActionListener());
+        rulesBox = new JDialog();
+        rulesBox.setSize(300, 200);
+        helpMenu.add(rulesItem);
 
         JLabel rulesTitle = new JLabel(
                 "Helpful Resources");
@@ -86,6 +94,7 @@ public class CheckerGame extends JFrame implements Dimensions {
         rulesFirst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         rulesSecond.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
+        // TODO Merge two buttons
         rulesFirst.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -114,8 +123,9 @@ public class CheckerGame extends JFrame implements Dimensions {
         rulesBox.add(rulesFirst);
         rulesBox.add(rulesSecond);
 
-
-        add(panel);
+        setLayout(new BorderLayout());
+        add(panel, BorderLayout.CENTER);
+        add(statusBoard, BorderLayout.SOUTH);
         setJMenuBar(menubar);
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setTitle("The Society for Putting Things Over Other Things");
@@ -140,9 +150,12 @@ public class CheckerGame extends JFrame implements Dimensions {
                 case "New Game" -> {
                     System.out.println("New Game button pressed.");
                     board = new CheckerBoard(); // Create a new board.
+                    panel.remove(0);
+                    panel.add(board);
                 }
                 case "Checker Game Rules" -> {
-                    
+                    System.out.println("Rules button pressed.");
+                    rulesBox.setVisible(true);
                 }
             }
         }
@@ -170,7 +183,8 @@ public class CheckerGame extends JFrame implements Dimensions {
             // If this is first click.
             if (!firstValidChoice) {
                 // Only move on to second click if piece is on controlling player's turn.
-                if (board.boardStatus[clickRow][clickCol] == CheckerBoard.convert(board.isRedTurn)) {
+                if (Character.toLowerCase(board.boardStatus[clickRow][clickCol])
+                        == CheckerBoard.convert(board.isRedTurn)) {
                     firstValidChoice = true;
                     // Save initial location info into move array.
                     moveVar[0][0] = clickRow;
@@ -191,19 +205,19 @@ public class CheckerGame extends JFrame implements Dimensions {
                     System.out.println("Success");
                     CheckerBoard.arrayToString(board.boardStatus);
 
-                    board.repaint();
-
                     // Check if there is a winner.
                     switch (board.isWinner()) {
                         case 'r' -> {
                             System.out.println("Red Wins!");
                             board = new CheckerBoard(
                                     Dimensions.BOARD_STATUS_RED_WINS, true, 32, 0);
+                            return;
                         }
                         case 'b' -> {
                             System.out.println("Black Wins!");
                             board = new CheckerBoard(
                                     Dimensions.BOARD_STATUS_BLACK_WINS, false, 0, 32);
+                            return;
                         }
                     }
 

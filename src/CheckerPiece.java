@@ -39,11 +39,6 @@ public class CheckerPiece extends JComponent implements Dimensions {
     @Override
     public void paintComponent(Graphics g) {
         char holder = Character.toLowerCase(status); // Strip King Status
-
-        // Draw borders of tiles.
-        g.setColor(Color.black);
-        g.drawRect(row, col, BLOCK_DIMENSION, BLOCK_DIMENSION);
-
         // Pick alternating white and green tile color.
         if ((row + col) % 2 == 1) {
             g.setColor(Color.green);
@@ -54,12 +49,6 @@ public class CheckerPiece extends JComponent implements Dimensions {
         // Fill tiles.
         g.fillRect(row, col, BLOCK_DIMENSION, BLOCK_DIMENSION);
 
-        // Fill crown if King
-        if (Character.isUpperCase(status)) {
-            g.setColor(Color.yellow);
-            g.fillOval(row + 20, col + 20, CROWN_DIMENSION, CROWN_DIMENSION);
-        }
-
         // Pick color of piece based on side.
         if (holder == 'b') {
             g.setColor(Color.BLACK);
@@ -69,6 +58,23 @@ public class CheckerPiece extends JComponent implements Dimensions {
 
         // Fill pieces
         g.fillOval(row + 10, col + 10, PIECE_DIMENSION, PIECE_DIMENSION);
+
+        // Fill crown if King
+        if (Character.isUpperCase(status)) {
+            g.setColor(Color.yellow);
+            g.fillOval(row + 20, col + 20, CROWN_DIMENSION, CROWN_DIMENSION);
+        }
+
+        // Draw borders of tiles.
+        g.setColor(Color.black);
+        g.drawRect(row, col, BLOCK_DIMENSION, BLOCK_DIMENSION);
+    }
+
+    public void setPiece(int row, int col, char status) {
+        this.status = status;
+        this.row = row;
+        this.col = col;
+        repaint();
     }
 
     /**
