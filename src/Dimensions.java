@@ -12,7 +12,7 @@ public interface Dimensions {
     int BOARD_SIZE = 8;
     int BLOCK_DIMENSION = 60;
     int PIECE_DIMENSION = 40;
-    int CROWN_DIMENSION = 10;
+    int CROWN_DIMENSION = 20;
 
     int FRAME_WIDTH = 505;
     int FRAME_HEIGHT = 585;

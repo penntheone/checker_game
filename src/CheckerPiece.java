@@ -47,7 +47,7 @@ public class CheckerPiece extends JComponent implements Dimensions {
         }
 
         // Fill tiles.
-        g.fillRect(row, col, BLOCK_DIMENSION, BLOCK_DIMENSION);
+        g.fillRect(0, 0, BLOCK_DIMENSION, BLOCK_DIMENSION);
 
         // Pick color of piece based on side.
         if (holder == 'b') {
@@ -57,19 +57,26 @@ public class CheckerPiece extends JComponent implements Dimensions {
         }
 
         // Fill pieces
-        g.fillOval(row + 10, col + 10, PIECE_DIMENSION, PIECE_DIMENSION);
+        g.fillOval(10, 10, PIECE_DIMENSION, PIECE_DIMENSION);
 
         // Fill crown if King
         if (Character.isUpperCase(status)) {
             g.setColor(Color.yellow);
-            g.fillOval(row + 20, col + 20, CROWN_DIMENSION, CROWN_DIMENSION);
+            g.fillOval(20, 20, CROWN_DIMENSION, CROWN_DIMENSION);
         }
 
         // Draw borders of tiles.
         g.setColor(Color.black);
-        g.drawRect(row, col, BLOCK_DIMENSION, BLOCK_DIMENSION);
+        g.drawRect(0, 0, BLOCK_DIMENSION, BLOCK_DIMENSION);
     }
 
+    /**
+     * Set a piece at provided location with provided status.
+     *
+     * @param row row on board.
+     * @param col column on board.
+     * @param status desired status.
+     */
     public void setPiece(int row, int col, char status) {
         this.status = status;
         this.row = row;
