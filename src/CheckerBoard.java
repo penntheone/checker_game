@@ -1,6 +1,5 @@
 import javax.swing.JPanel;
-
-import java.awt.*;
+import java.awt.GridLayout;
 
 /**
  *  A representation of a CheckerBoard JPanel, which extends JPanel and implements Dimensions.
