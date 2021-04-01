@@ -72,10 +72,11 @@ public class CheckerBoard extends JPanel implements Dimensions {
 
     /**
      * Change boardStatus to the provided parameter and immediately restart the game.
-     * @param boardStatus the desired board.
+     * @param boardNew the desired board.
      */
-    public void setBoardStatus(char[][] boardStatus, boolean isRedTurn) {
-        this.boardStatus = boardStatus;
+    public void setBoardStatus(char[][] boardNew, boolean isRedTurn) {
+        this.boardStatus = boardNew;
+        arrayToString(this.boardStatus);
         int rCount = 0;
         int bCount = 0;
 
@@ -93,6 +94,7 @@ public class CheckerBoard extends JPanel implements Dimensions {
         this.isRedTurn = isRedTurn;
         this.rCount = rCount;
         this.bCount = bCount;
+
     }
 
     /**

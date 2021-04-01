@@ -37,7 +37,7 @@ public class CheckerGame extends JFrame implements Dimensions {
     boolean firstValidChoice;
     int[][] moveVar;
 
-    CheckerBoard board;
+    CheckerBoard board = new CheckerBoard();
     JPanel panel;
     JPanel statusBoard;
     JLabel statusRed;
@@ -72,7 +72,6 @@ public class CheckerGame extends JFrame implements Dimensions {
 
         // Instantiate game board.
         panel = new JPanel();
-        board = new CheckerBoard();
         panel.add(board);
         panel.addMouseListener(new MouseClickListener());
 
@@ -177,8 +176,7 @@ public class CheckerGame extends JFrame implements Dimensions {
                     aboutBox.setLayout(new BorderLayout());
                     aboutBox.setSize(515, 215);
                     aboutBox.setResizable(false);
-                    JLabel about = new JLabel(
-                            "<html>Created by Pendleton Pham<br>phamsq@miamioh.edu<br>CSE271 Project4<br>©2021<br><br>Please, Microsoft! Let me be your little Pog-champ! uwu</html>");
+                    JLabel about = new JLabel("<html>Created by Pendleton Pham<br>phamsq@miamioh.edu<br>CSE271 Project4<br>©2021<br><br>Please, Microsoft! Let me be your little Pog-champ! uwu</html>");
                     about.setHorizontalAlignment(JLabel.CENTER);
                     aboutBox.add(about, BorderLayout.CENTER);
                 }
@@ -304,10 +302,9 @@ public class CheckerGame extends JFrame implements Dimensions {
     }
 
     /**
-     * I Hereby Exterminate Everything Around Me
-     * That Restricts Me from Being the Master.
-     *
+     * I Hereby Exterminate Everything Around Me That Restricts Me from Being the Master.
      * TREMBLE IN FEAR! GRACE UNDER MY BLINDING GLORY!
+     *
      * @param args arguments
      */
     public static void main(String[] args) {
