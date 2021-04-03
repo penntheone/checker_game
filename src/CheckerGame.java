@@ -21,6 +21,7 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
 /**
  *  The GUI constructors and game file's driver. CheckerGame extends JFrame
@@ -204,8 +205,23 @@ public class CheckerGame extends JFrame implements Dimensions {
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
                 case "Exit" -> System.exit(0);
-                case "New Game" -> board.setBoardStatus(
-                        Dimensions.BOARD_STATUS_DEFAULT, true); // Create a new board.
+                case "New Game" -> {
+                    board.setBoardStatus(
+                            new char[][]{
+                                {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                {'b', '_', 'b', '_', 'b', '_', 'b', '_'},
+                                {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                {'_', '_', '_', '_', '_', '_', '_', '_'},
+                                {'_', '_', '_', '_', '_', '_', '_', '_'},
+                                {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
+                                {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
+                                {'r', '_', 'r', '_', 'r', '_', 'r', '_'}
+                            }, true); // Create a new board.
+
+                    statusRed.setText(String.format("Red: %d", board.rCount));
+                    statusBlack.setText(String.format("Black: %d", board.bCount));
+                    // TODO Figuring out wtf happened to the interface!
+                }
                 case "Checker Game Rules" -> rulesBox.setVisible(true);
                 case "About" -> aboutBox.setVisible(true);
             }
@@ -258,13 +274,31 @@ public class CheckerGame extends JFrame implements Dimensions {
                         case 'r' -> {
                             statusRed.setText("Red Wins!");
                             statusBlack.setText("");
-                            board.setBoardStatus(Dimensions.BOARD_STATUS_RED_WINS, true);
+                            board.setBoardStatus(new char[][]{
+                                {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
+                                {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
+                                {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
+                                {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
+                                {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
+                                {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
+                                {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
+                                {'r', '_', 'r', '_', 'r', '_', 'r', '_'}
+                                }, true);
                             return;
                         }
                         case 'b' -> {
                             statusRed.setText("");
                             statusBlack.setText("Black Wins!");
-                            board.setBoardStatus(Dimensions.BOARD_STATUS_BLACK_WINS, false);
+                            board.setBoardStatus(new char[][]{
+                                {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                {'b', '_', 'b', '_', 'b', '_', 'b', '_'},
+                                {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                {'b', '_', 'b', '_', 'b', '_', 'b', '_'},
+                                {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                {'b', '_', 'b', '_', 'b', '_', 'b', '_'},
+                                {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                {'b', '_', 'b', '_', 'b', '_', 'b', '_'}
+                                }, false);
                             return;
                         }
                         default -> {
@@ -302,10 +336,13 @@ public class CheckerGame extends JFrame implements Dimensions {
     }
 
     /**
-     * I Hereby Exterminate Everything Around Me That Restricts Me from Being the Master.
+     * I, Aphrodite The Mighty,
+     * Henceforth Exterminate Everything Around Me That
+     * Restricts Me from Being the Master.
+     *
      * TREMBLE IN FEAR! GRACE UNDER MY BLINDING GLORY!
      *
-     * @param args arguments
+     * @param args (graceful) arguments
      */
     public static void main(String[] args) {
         JFrame checkerFrame = new CheckerGame();
