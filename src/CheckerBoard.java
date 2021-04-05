@@ -170,6 +170,8 @@ public class CheckerBoard extends JPanel implements Dimensions {
         }
 
         // King if red piece at top or black piece at bottom.
+        // Keep in mind that currentStatus is merely a holder
+        //      and should not be committed yet.
         if ((move[1][0] == 0 && isRedTurn) ||
                 (move[1][0] == BOARD_SIZE - 1 && !isRedTurn)) {
             currentStatus = Character.toUpperCase(currentStatus);

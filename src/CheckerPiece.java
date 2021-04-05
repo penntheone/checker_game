@@ -51,7 +51,7 @@ public class CheckerPiece extends JComponent implements Dimensions {
 
         // Pick color of piece based on side.
         if (holder == 'b') {
-            g.setColor(Color.BLACK);
+            g.setColor(Color.black);
         } else if (holder == 'r') {
             g.setColor(Color.red);
         }

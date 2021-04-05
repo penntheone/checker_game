@@ -16,12 +16,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 
 /**
  *  The GUI constructors and game file's driver. CheckerGame extends JFrame
@@ -130,34 +128,14 @@ public class CheckerGame extends JFrame implements Dimensions {
                         rulesFirst.setForeground(Color.BLUE.darker());
                         rulesFirst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                         rulesBox.add(rulesFirst);
-                        rulesFirst.addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mouseClicked(MouseEvent e) {
-                                try {
-                                    Desktop.getDesktop().browse(new URI(
-                                            "https://www.wikihow.com/Play-Checkers"));
-                                } catch (IOException | URISyntaxException e1) {
-                                    e1.printStackTrace();
-                                }
-                            }
-                        });
+                        rulesFirst.addMouseListener(new LinkActionListener());
 
                         // Second link
                         JLabel rulesSecond = new JLabel(
                                 "https://www.youtube.com/watch?v=ScKIdStgAfU");
                         rulesSecond.setForeground(Color.BLUE.darker());
                         rulesSecond.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                        rulesSecond.addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mouseClicked(MouseEvent e) {
-                                try {
-                                    Desktop.getDesktop().browse(new URI(
-                                            "https://www.youtube.com/watch?v=ScKIdStgAfU"));
-                                } catch (IOException | URISyntaxException e1) {
-                                    e1.printStackTrace();
-                                }
-                            }
-                        });
+                        rulesSecond.addMouseListener(new LinkActionListener());
 
                         JLabel rulesTitle = new JLabel(
                                 "Helpful Resources");
@@ -177,7 +155,9 @@ public class CheckerGame extends JFrame implements Dimensions {
                     aboutBox.setLayout(new BorderLayout());
                     aboutBox.setSize(515, 215);
                     aboutBox.setResizable(false);
-                    JLabel about = new JLabel("<html>Created by Pendleton Pham<br>phamsq@miamioh.edu<br>CSE271 Project4<br>©2021<br><br>Please, Microsoft! Let me be your little Pog-champ! uwu</html>");
+                    JLabel about = new JLabel(
+                            "<html>Created by Pendleton Pham<br>phamsq@miamioh.edu<br>CSE271 Project4<br>©2021<br><br>Please, Microsoft! Let me be your little Pog-champ! uwu</html>"
+                    );
                     about.setHorizontalAlignment(JLabel.CENTER);
                     aboutBox.add(about, BorderLayout.CENTER);
                 }
@@ -195,6 +175,25 @@ public class CheckerGame extends JFrame implements Dimensions {
         setLayout(new BorderLayout());
         add(panel, BorderLayout.CENTER);
         add(statusBoard, BorderLayout.SOUTH);
+    }
+
+    /**
+     * A child static class that implements the link in the resources box.
+     */
+    static class LinkActionListener extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (e.getComponent() instanceof JLabel) {
+                JLabel label = (JLabel) e.getComponent();
+                String text = label.getText();
+
+                try {
+                    Desktop.getDesktop().browse(new URI(text));
+                } catch (IOException | URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
@@ -217,10 +216,8 @@ public class CheckerGame extends JFrame implements Dimensions {
                                 {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
                                 {'r', '_', 'r', '_', 'r', '_', 'r', '_'}
                             }, true); // Create a new board.
-
                     statusRed.setText(String.format("Red: %d", board.rCount));
                     statusBlack.setText(String.format("Black: %d", board.bCount));
-                    // TODO Figuring out wtf happened to the interface!
                 }
                 case "Checker Game Rules" -> rulesBox.setVisible(true);
                 case "About" -> aboutBox.setVisible(true);
@@ -231,7 +228,7 @@ public class CheckerGame extends JFrame implements Dimensions {
     /**
      * A child class that drives mouse interactions.
      */
-    class MouseClickListener implements MouseListener {
+    class MouseClickListener extends MouseAdapter {
         /**
          * Large mouseClicked() method that drive interactions on click.
          *
@@ -317,28 +314,12 @@ public class CheckerGame extends JFrame implements Dimensions {
                 firstValidChoice = false;
             }
         }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-        }
     }
 
     /**
-     * I, Aphrodite The Mighty,
-     * Henceforth Exterminate Everything Around Me That
-     * Restricts Me from Being the Master.
+     * I, Hephaestus The Lionhearted,
+     * Henceforth Exterminate Everything Around
+     * Me That Restricts Me from Being the Master.
      *
      * TREMBLE IN FEAR! GRACE UNDER MY BLINDING GLORY!
      *
