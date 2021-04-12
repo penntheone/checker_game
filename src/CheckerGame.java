@@ -6,8 +6,11 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-import java.awt.*;
-
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Desktop;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -19,7 +22,7 @@ import java.net.URISyntaxException;
 
 /**
  *  The GUI constructors and game file's driver. CheckerGame extends JFrame
- *  and implements Dimensions
+ *  and implements Dimensions.
  *
  *  @author Pendleton Pham
  *  phamsq
@@ -29,25 +32,33 @@ import java.net.URISyntaxException;
  *  CheckerGame.java
  */
 public class CheckerGame extends JFrame implements Dimensions {
+
+    // ================================================= Variables
+
     boolean firstValidChoice;
+    boolean endGame;
     int[][] moveVar;
 
-    CheckerBoard board = new CheckerBoard();
     JPanel panel;
+    CheckerBoard board = new CheckerBoard();
+    JPanel statusArea;
+
     JPanel statusCurrent;
     JLabel current;
-    public JLabel turn;
+
     JPanel statusBoard;
-    JPanel statusArea;
     JLabel statusRed;
     JLabel statusBlack;
-    JDialog rulesBox;
-    JDialog aboutBox;
+    final JLabel separator = new JLabel(" | ");
+    JLabel turn;
+
     JMenuBar menubar;
     JMenu fileMenu;
     JMenu helpMenu;
+    JDialog rulesBox;
+    JDialog aboutBox;
 
-    final JLabel separator = new JLabel(" | ");
+    // ================================================= Constructors
 
     /**
      * Default
@@ -59,6 +70,8 @@ public class CheckerGame extends JFrame implements Dimensions {
         constructDisplay();
     }
 
+    // ================================================= Methods
+
     /**
      * Create the GUI by instantiating all GUI elements, adding them
      * to a JPanel object, and adding the JPanel object to the JFrame.
@@ -68,6 +81,7 @@ public class CheckerGame extends JFrame implements Dimensions {
         moveVar = new int[2][2]; // A blank move array.
         firstValidChoice = false; // Keeping track if the
                                   // initial position is valid.
+        endGame = false; // Preventing input after winning.
 
         // Instantiate game board.
         panel = new JPanel();
@@ -95,6 +109,7 @@ public class CheckerGame extends JFrame implements Dimensions {
             statusBoard.add(turn);
         }
 
+        // Instantiate current operation label.
         statusCurrent = new JPanel();
         statusCurrent.setLayout(new FlowLayout());
         {
@@ -103,6 +118,7 @@ public class CheckerGame extends JFrame implements Dimensions {
             statusCurrent.add(current);
         }
 
+        // Add statusCurrent and statusBoard to main statusArea
         statusArea = new JPanel();
         statusArea.setLayout(new BorderLayout());
         statusArea.add(statusCurrent, BorderLayout.CENTER);
@@ -183,15 +199,15 @@ public class CheckerGame extends JFrame implements Dimensions {
             menubar.add(helpMenu);
         }
 
+        setLayout(new BorderLayout());
+        add(panel, BorderLayout.CENTER);
+        add(statusArea, BorderLayout.SOUTH);
+
         setTitle("The Society for Putting Things Over Other Things");
         setJMenuBar(menubar);
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        setLayout(new BorderLayout());
-        add(panel, BorderLayout.CENTER);
-        add(statusArea, BorderLayout.SOUTH);
     }
 
     /**
@@ -212,6 +228,8 @@ public class CheckerGame extends JFrame implements Dimensions {
             }
         }
     }
+
+    // ================================================= Children classes
 
     /**
      * A child class that implements the menu buttons.
@@ -235,6 +253,7 @@ public class CheckerGame extends JFrame implements Dimensions {
                             }, false); // Create a new board.
                     statusRed.setText(String.format("Red: %d", board.rCount));
                     statusBlack.setText(String.format("Black: %d", board.bCount));
+                    endGame = false;
                     current.setText("New Game!");
                 }
                 case "Checker Game Rules" -> rulesBox.setVisible(true);
@@ -254,129 +273,141 @@ public class CheckerGame extends JFrame implements Dimensions {
          */
         @Override
         public void mouseClicked(MouseEvent e) {
-            // Converting from pixel to row and column
-            int clickRow = e.getY() / BLOCK_DIMENSION;
-            int clickCol = e.getX() / BLOCK_DIMENSION;
+            if (!endGame) {
+                // Converting from pixel to row and column
+                int clickRow = e.getY() / BLOCK_DIMENSION;
+                int clickCol = e.getX() / BLOCK_DIMENSION;
 
-            // If this is first click.
-            if (!firstValidChoice) {
-                // Only move on to second click if piece is on controlling player's turn.
-                if (Character.toLowerCase(board.boardStatus[clickRow][clickCol])
-                        == CheckerBoard.convert(board.isRedTurn)) {
-                    firstValidChoice = true;
-                    // Save initial location info into move array.
-                    moveVar[0][0] = clickRow;
-                    moveVar[0][1] = clickCol;
-                    current.setText("First piece selected! Pick another one...");
-                } else {
-                    current.setText("Not a valid selection! Try again.");
+                char convertFromBoolean = 'b';
+                if (board.isRedTurn) {
+                    convertFromBoolean = 'r';
                 }
-            }
 
-            // If this is second click.
-            else {
-                // Desired location is always valid for the purpose of verification.
-                moveVar[1][0] = clickRow;
-                moveVar[1][1] = clickCol;
-
-                // Attempt to move the piece.
-                int holder = board.move(moveVar);
-                if (holder / 10 == 1) {
-                    System.out.println("Success");
-                    CheckerBoard.arrayToString(board.boardStatus);
-
-                    // Check if there is a winner.
-                    switch (board.isWinner()) {
-                        case 'r' -> {
-                            statusRed.setText("Red Wins!");
-                            statusBlack.setText("");
-                            board.setBoardStatus(new char[][]{
-                                {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
-                                {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
-                                {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
-                                {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
-                                {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
-                                {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
-                                {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
-                                {'r', '_', 'r', '_', 'r', '_', 'r', '_'}
-                                }, true);
-                            current.setText("Congratulations!");
-                            board.isRedTurn = true;
-                            switchTurn();
-                            return;
-                        }
-                        case 'b' -> {
-                            statusRed.setText("");
-                            statusBlack.setText("Black Wins!");
-                            board.setBoardStatus(new char[][]{
-                                {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
-                                {'b', '_', 'b', '_', 'b', '_', 'b', '_'},
-                                {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
-                                {'b', '_', 'b', '_', 'b', '_', 'b', '_'},
-                                {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
-                                {'b', '_', 'b', '_', 'b', '_', 'b', '_'},
-                                {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
-                                {'b', '_', 'b', '_', 'b', '_', 'b', '_'}
-                                }, false);
-                            current.setText("Congratulations!");
-                            board.isRedTurn = false;
-                            switchTurn();
-                            return;
-                        }
-                        default -> {
-                            statusRed.setText(String.format("Red: %d", board.rCount));
-                            statusBlack.setText(String.format("Black: %d", board.bCount));
-                            current.setText("Success!");
-                        }
-                    }
-
-                    boolean checkRed = board.checkRed();
-                    boolean checkBlack = board.checkBlack();
-
-                    if (holder % 10 == 1) {
-                        if (board.isRedTurn) {
-                            board.capture = checkBlack;
-                        } else {
-                            board.capture = checkRed;
-                        }
-                        switchTurn();
+                // If this is first click.
+                if (!firstValidChoice) {
+                    // Only move on to second click if piece is on controlling player's turn.
+                    if (Character.toLowerCase(board.boardStatus[clickRow][clickCol]) == convertFromBoolean) {
+                        firstValidChoice = true;
+                        // Save initial location info into move array.
+                        moveVar[0][0] = clickRow;
+                        moveVar[0][1] = clickCol;
+                        current.setText("A valid piece selected! Pick the destination...");
                     } else {
-                        if (board.isRedTurn) {
-                            if (checkRed) {
-                                board.capture = true;
-                            } else {
-                                board.capture = checkBlack;
+                        current.setText("Not a valid selection! Try again.");
+                    }
+                }
+
+                // If this is second click.
+                else {
+                    // Desired location is always valid for the purpose of verification.
+                    moveVar[1][0] = clickRow;
+                    moveVar[1][1] = clickCol;
+
+                    // Attempt to move the piece.
+                    int holder = board.move(moveVar);
+                    if (holder / 10 == 1) {
+                        // Check if there is a winner.
+                        switch (board.isWinner()) {
+                            case 'r' -> {
+                                statusRed.setText("Red Wins!");
+                                statusBlack.setText("");
+                                board.setBoardStatus(new char[][]{
+                                        {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
+                                        {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
+                                        {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
+                                        {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
+                                        {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
+                                        {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
+                                        {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
+                                        {'r', '_', 'r', '_', 'r', '_', 'r', '_'}
+                                }, true);
+                                current.setText("Congratulations!");
+                                endGame = true;
                                 switchTurn();
+                                return;
                             }
-                        } else {
-                            if (checkBlack) {
-                                board.capture = true;
+                            case 'b' -> {
+                                statusRed.setText("");
+                                statusBlack.setText("Black Wins!");
+                                board.setBoardStatus(new char[][]{
+                                        {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                        {'b', '_', 'b', '_', 'b', '_', 'b', '_'},
+                                        {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                        {'b', '_', 'b', '_', 'b', '_', 'b', '_'},
+                                        {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                        {'b', '_', 'b', '_', 'b', '_', 'b', '_'},
+                                        {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                        {'b', '_', 'b', '_', 'b', '_', 'b', '_'}
+                                }, false);
+                                current.setText("Congratulations!");
+                                endGame = true;
+                                switchTurn();
+                                return;
+                            }
+                            default -> {
+                                statusRed.setText(String.format("Red: %d", board.rCount));
+                                statusBlack.setText(String.format("Black: %d", board.bCount));
+                                current.setText("Success!");
+                            }
+                        }
+
+                        // Check for capture status.
+                        boolean checkRed = board.checkRed();
+                        boolean checkBlack = board.checkBlack();
+
+                        // If a 1 space move, switch turn immediately.
+                        if (holder % 10 == 1) {
+                            if (board.isRedTurn) {
+                                board.capture = checkBlack;
                             } else {
                                 board.capture = checkRed;
-                                switchTurn();
                             }
+                            switchTurn();
+                        } else {
+                            // If a 2 space capture move.
+                            if (board.isRedTurn) {
+                                if (checkRed) {
+                                    board.capture = true;
+                                    // Does not invert turn if still more capture moves.
+                                } else {
+                                    board.capture = checkBlack;
+                                    switchTurn();
+                                }
+                            } else {
+                                if (checkBlack) {
+                                    board.capture = true;
+                                    // Does not invert turn if still more capture moves.
+                                } else {
+                                    board.capture = checkRed;
+                                    switchTurn();
+                                }
+                            }
+                        }
+
+                        // Flush moveVar.
+                        moveVar = new int[2][2];
+                    } else {
+                        switch (holder) {
+                            // Print out appropriate error log.
+                            case 0 -> current.setText("Capture move with no enemies! Try again.");
+                            case 2 -> current.setText("The move is not a diagonal one! Try again.");
+                            case 3 -> current.setText("The destination is occupied! Try again.");
+                            case 4 -> current.setText("Only kings can move backwards! Try again.");
+                            case 5 -> current.setText("You have to capture! Try again.");
+                            case 6 -> current.setText("Cannot capture a friendly piece! Try again.");
+                            case 9 -> current.setText("Cannot move for more than two spaces! Try again.");
                         }
                     }
 
-                    // Flush moveVar.
-                    moveVar = new int[2][2];
-                } else {
-                    switch (holder) {
-                        case 0 -> current.setText("Capture move with no enemies! Try again.");
-                        case 2 -> current.setText("The move is not a diagonal one! Try again.");
-                        case 3 -> current.setText("The destination is occupied! Try again.");
-                        case 4 -> current.setText("Only kings can move backwards! Try again.");
-                        case 5 -> current.setText("You have to capture! Try again.");
-                        case 6 -> current.setText("Cannot capture a friendly piece! Try again.");
-                        case 9 -> current.setText("Cannot move for more than two spaces! Try again.");
-                    }
+                    // Return to first click.
+                    firstValidChoice = false;
                 }
-
-                // Return to first click.
-                firstValidChoice = false;
             }
         }
 
+        /**
+         * Reverse turn, and change turn indicator.
+         */
         public void switchTurn() {
             board.isRedTurn = !board.isRedTurn;
             if (board.isRedTurn) {
@@ -388,6 +419,8 @@ public class CheckerGame extends JFrame implements Dimensions {
             }
         }
     }
+
+    // ================================================= Main
 
     /**
      * I, Hephaestus The Lionhearted,

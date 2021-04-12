@@ -9,6 +9,9 @@
  *  Dimensions.java
  */
 public interface Dimensions {
+
+    // ================================================= Integers
+
     int BOARD_SIZE = 8;
     int BLOCK_DIMENSION = 60;
     int PIECE_DIMENSION = 40;
@@ -17,6 +20,7 @@ public interface Dimensions {
     int FRAME_WIDTH = 505;
     int FRAME_HEIGHT = 590;
 
+    // ================================================= Arrays
     // The default board when starting a game.
     char[][] BOARD_STATUS_DEFAULT = {
         {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
