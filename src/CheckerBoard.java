@@ -49,7 +49,8 @@ public class CheckerBoard extends JPanel implements Dimensions {
                             throw new IllegalCheckerBoardArgumentException("Illegal piece location!");
                         }
                     } else {
-                        switch(boardStatus[row][col]) { // Piece status cannot be other than '_', 'b', and 'r'
+                        switch (boardStatus[row][col]) {
+                            // Piece status cannot be other than '_', 'b', 'B', 'r', and 'R'.
                             case 'r':
                             case 'R':
                                 rCount++;
@@ -74,7 +75,6 @@ public class CheckerBoard extends JPanel implements Dimensions {
                     add(pieceHolder[row * 8 + col], row * 8 + col);
                 }
             }
-
             this.rCount = rCount;
             this.bCount = bCount;
         } catch (IllegalCheckerBoardArgumentException e) {
