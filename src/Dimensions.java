@@ -15,7 +15,7 @@ public interface Dimensions {
     int CROWN_DIMENSION = 20;
 
     int FRAME_WIDTH = 505;
-    int FRAME_HEIGHT = 585;
+    int FRAME_HEIGHT = 590;
 
     // The default board when starting a game.
     char[][] BOARD_STATUS_DEFAULT = {

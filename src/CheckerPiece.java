@@ -15,9 +15,14 @@ import java.awt.Graphics;
  *  CheckerPiece.java
  */
 public class CheckerPiece extends JComponent implements Dimensions {
+
+    // ================================================= Variables
+
     int row;
     int col;
     char status;
+
+    // ================================================= Constructors
 
     /**
      * Workhorse
@@ -32,7 +37,9 @@ public class CheckerPiece extends JComponent implements Dimensions {
         this.row = row;
         this.col = col;
     }
-    
+
+    // ================================================= Methods
+
     /**
      * {@inheritDoc}
      */

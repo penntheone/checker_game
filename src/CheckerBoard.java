@@ -17,6 +17,7 @@ public class CheckerBoard extends JPanel implements Dimensions {
     boolean isRedTurn;
     int bCount;
     int rCount;
+    boolean capture;
 
     /**
      * Workhorse
@@ -30,6 +31,7 @@ public class CheckerBoard extends JPanel implements Dimensions {
             // Instantiating all game elements
             this.boardStatus = boardStatus;
             pieceHolder = new CheckerPiece[64];
+            capture = false;
             setLayout(new GridLayout(8,8));
             for (int row = 0; row < boardStatus.length; row++) {
                 for (int col = 0; col < boardStatus[row].length; col++) {
@@ -40,7 +42,17 @@ public class CheckerBoard extends JPanel implements Dimensions {
                     } else {
                         switch(boardStatus[row][col]) { // Piece status cannot be other than '_', 'b', and 'r'
                             case 'r':
+                            case 'R':
+                                if (redCapture(row, col)) {
+                                    capture = true;
+                                }
+                                break;
                             case 'b':
+                            case 'B':
+                                if (blackCapture(row, col)) {
+                                    capture = true;
+                                }
+                                break;
                             case '_':
                                 break;
                             default:
@@ -67,7 +79,7 @@ public class CheckerBoard extends JPanel implements Dimensions {
      * Constructing a default CheckerBoard JPanel.
      */
     public CheckerBoard() {
-        this(BOARD_STATUS_DEFAULT, true, 12, 12);
+        this(BOARD_STATUS_DEFAULT, false, 12, 12);
     }
 
     /**
@@ -134,7 +146,7 @@ public class CheckerBoard extends JPanel implements Dimensions {
      * @param move pre-encoded 2D array
      * @return true if successful and false otherwise.
      */
-    public boolean move(int[][] move) {
+    public int move(int[][] move) {
         // Current position's status
         char currentStatus = boardStatus[move[0][0]][move[0][1]];
 
@@ -152,20 +164,21 @@ public class CheckerBoard extends JPanel implements Dimensions {
         int difRow = move[1][0] - move[0][0];
         int difCol = move[1][1] - move[0][1];
 
-        // Either
         // The move is not a diagonal one (difRow does not match difCol).
-        // Or
+        if (Math.abs(difRow) != Math.abs(difCol)) {
+            return 2;
+        }
+
         // The desired space is occupied by another piece.
-        if (Math.abs(difRow) != Math.abs(difCol) ||
-            desiredStatus != '_') {
-            return false;
+        if (desiredStatus != '_') {
+            return 3;
         }
 
         // Only King can move backwards.
         if (!Character.isUpperCase(currentStatus)) { // If not King
             if ((currentStatus == 'r' && difRow > 0) ||
                     (currentStatus == 'b' && difRow < 0)) {
-                return false;
+                return 4;
             }
         }
 
@@ -181,10 +194,15 @@ public class CheckerBoard extends JPanel implements Dimensions {
         switch (Math.abs(difRow)) {
             // A normal 1 space move.
             case 1 -> {
+                if (capture) {
+                    return 5;
+                }
                 // Clear the initial space,
                 setCheckerPiece(move[0][0], move[0][1], '_');
                 // and set the final space.
                 setCheckerPiece(move[1][0], move[1][1], currentStatus);
+
+                return 11;
             }
 
             // A capture 2 space move.
@@ -195,7 +213,11 @@ public class CheckerBoard extends JPanel implements Dimensions {
 
                 // Captured piece cannot be a friendly one.
                 if (boardStatus[middleRow][middleCol] != middleStatus) {
-                    return false;
+                    if (boardStatus[middleRow][middleCol] == '_'){
+                        return 0;
+                    } else {
+                        return 6;
+                    }
                 }
 
                 // Clear the initial space,
@@ -216,13 +238,10 @@ public class CheckerBoard extends JPanel implements Dimensions {
             // Nitwit wanker who couldn't even
             // bother to check the damn rulebook!
             default -> {
-                return false;
+                return 9;
             }
         }
-
-        // Reverse turn.
-        isRedTurn = !isRedTurn;
-        return true;
+        return 12;
     }
 
     /**
@@ -258,6 +277,66 @@ public class CheckerBoard extends JPanel implements Dimensions {
         }
     }
 
+    public boolean checkBlack() {
+        for (int row = 0; row < boardStatus.length; row++) {
+            for (int col = 0; col < boardStatus[row].length; col++) {
+                switch(boardStatus[row][col]) { // Piece status cannot be other than '_', 'b', and 'r'
+                    case 'b':
+                    case 'B':
+                        if (blackCapture(row, col)) {
+                            return true;
+                        }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean checkRed() {
+        for (int row = 0; row < boardStatus.length; row++) {
+            for (int col = 0; col < boardStatus[row].length; col++) {
+                switch(boardStatus[row][col]) { // Piece status cannot be other than '_', 'b', and 'r'
+                    case 'r':
+                    case 'R':
+                        if (redCapture(row, col)) {
+                            return true;
+                        }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean redCapture(int row, int col) {
+        boolean holder = false;
+        if (row - 2 >= 0) {
+            holder = (col - 2 >= 0 && boardStatus[row - 2][col - 2] == '_' && boardStatus[row - 1][col - 1] == 'b')
+                || (col + 2 <= 7 && boardStatus[row - 2][col + 2] == '_' && boardStatus[row - 1][col + 1] == 'b');
+        }
+        if (holder) {
+            return true;
+        } else if ((Character.isUpperCase(boardStatus[row][col]) && row + 2 <= 7)) {
+            return (col - 2 >= 0 && boardStatus[row + 2][col - 2] == '_' && boardStatus[row + 1][col - 1] == 'b')
+                || (col + 2 <= 7 && boardStatus[row + 2][col + 2] == '_' && boardStatus[row + 1][col + 1] == 'b');
+        }
+        return false;
+    }
+
+    private boolean blackCapture(int row, int col) {
+        boolean holder = false;
+        if (row + 2 <= 7) {
+            holder = (col - 2 >= 0 && boardStatus[row + 2][col - 2] == '_' && boardStatus[row + 1][col - 1] == 'r')
+                    || (col + 2 <= 7 && boardStatus[row + 2][col + 2] == '_' && boardStatus[row + 1][col + 1] == 'r');
+        }
+        if (holder) {
+            return true;
+        } else if ((Character.isUpperCase(boardStatus[row][col]) && row - 2 >= 2)) {
+            return (col - 2 >= 0 && boardStatus[row - 2][col - 2] == '_' && boardStatus[row - 1][col - 1] == 'r')
+                || (col + 2 <= 7 && boardStatus[row - 2][col + 2] == '_' && boardStatus[row - 1][col + 1] == 'r');
+        }
+        return false;
+    }
+
     /**
      * Change the current turn holder.
      *
@@ -267,4 +346,5 @@ public class CheckerBoard extends JPanel implements Dimensions {
     public void setRedTurn(boolean redTurn) {
         isRedTurn = redTurn;
     }
+
 }
