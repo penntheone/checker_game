@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="f65d7bdc-d57f-4c8a-860a-1b5423930049" name="Default Changelist" comment="Single imports" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="DedicatedGUIClass" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="MIXED" />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="1" />
+  </component>
+  <component name="ProjectId" id="1qUV7uiCPu4lTjPJ6R7ikCRXnHy" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="TODO_SCOPE" value="All Places" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JAVA" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+  </component>
+  <component name="RunManager" selected="Application.CheckerGame">
+    <configuration name="CheckerGame" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="CheckerGame" />
+      <module name="Project4" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Scratch" type="Java Scratch" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Scratch" />
+      <option name="SCRATCH_FILE_URL" value="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.CheckerGame" />
+        <item itemvalue="Java Scratch.Scratch" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f65d7bdc-d57f-4c8a-860a-1b5423930049" name="Default Changelist" comment="" />
+      <created>1617133992392</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1617133992392</updated>
+      <workItem from="1617133993615" duration="27000" />
+      <workItem from="1617134242092" duration="7000" />
+      <workItem from="1617134288949" duration="34000" />
+      <workItem from="1617134387076" duration="4482000" />
+      <workItem from="1617149626372" duration="16748000" />
+      <workItem from="1617254018106" duration="1076000" />
+      <workItem from="1617255101822" duration="17506000" />
+      <workItem from="1617341778650" duration="3500000" />
+      <workItem from="1617474932622" duration="2621000" />
+      <workItem from="1617477586487" duration="2089000" />
+      <workItem from="1617564165742" duration="2234000" />
+      <workItem from="1617616559665" duration="3244000" />
+      <workItem from="1617679231071" duration="3567000" />
+      <workItem from="1617991616495" duration="630000" />
+      <workItem from="1618021050000" duration="2780000" />
+      <workItem from="1618095509066" duration="1683000" />
+      <workItem from="1618195521045" duration="12872000" />
+      <workItem from="1618210827749" duration="764000" />
+    </task>
+    <task id="LOCAL-00001" summary="Added Checksum and Piece Count&#10;Added Custom Exceptions">
+      <created>1617137917120</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1617137917120</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Bug fixes">
+      <created>1617138669866</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1617138669866</updated>
+    </task>
+    <task id="LOCAL-00003" summary="UI Functional">
+      <created>1617215234719</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1617215234720</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Fix GUI Drifting&#10;Fix King algorithm&#10;Fix Status Box&#10;New Help Menu&#10;New Link Dialog&#10;New About Dialog">
+      <created>1617303209965</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1617303209966</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Single imports">
+      <created>1617303780853</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1617303780853</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Single imports">
+      <created>1617311090723</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1617311090723</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Fixed the buttons and win conditions">
+      <created>1617477964493</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1617477964493</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Merge link listeners.">
+      <created>1617619887719</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1617619887719</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Updated rules&#10;Added status board and turn indicator.">
+      <created>1618207790882</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1618207790882</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Endgame added&#10;Better JavaDoc">
+      <created>1618210855400</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1618210855400</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Endgame added&#10;Better JavaDoc">
+      <created>1618211584073</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1618211584073</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/First" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+              <option name="COLUMN_ID_WIDTH">
+                <map>
+                  <entry key="Table.Default.Author.ColumnIdWidth" value="131" />
+                  <entry key="Table.Default.Date.ColumnIdWidth" value="130" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
+    <MESSAGE value="Added Checksum and Piece Count&#10;Added Custom Exceptions" />
+    <MESSAGE value="Bug fixes" />
+    <MESSAGE value="UI Functional" />
+    <MESSAGE value="Fix GUI Drifting&#10;Fix King algorithm&#10;Fix Status Box&#10;New Help Menu&#10;New Link Dialog&#10;New About Dialog" />
+    <MESSAGE value="Single imports" />
+    <MESSAGE value="Fixed the buttons and win conditions" />
+    <MESSAGE value="Merge link listeners." />
+    <MESSAGE value="Updated rules&#10;Added status board and turn indicator." />
+    <MESSAGE value="Endgame added&#10;Better JavaDoc" />
+    <option name="LAST_COMMIT_MESSAGE" value="Endgame added&#10;Better JavaDoc" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.java</url>
+          <line>11</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="CheckerBoard" memberName="boardStatus" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+</project>

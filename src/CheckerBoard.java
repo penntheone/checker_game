@@ -4,12 +4,12 @@ import java.awt.GridLayout;
 /**
  *  A representation of a CheckerBoard JPanel, which extends JPanel and implements Dimensions.
  *
- *  @author Pendleton Pham
- *  phamsq
- *  CSE 271 Section E
- *  Mar 29th, 2021
- *  Project4
- *  CheckerBoard.java
+ *  @author <b>Pendleton Pham</b> <br>
+ *  phamsq <br>
+ *  CSE 271 Section E <br>
+ *  Mar 29th, 2021 <br>
+ *  Project4 <br>
+ *  CheckerBoard.java <br>
  */
 public class CheckerBoard extends JPanel implements Dimensions {
 
@@ -25,11 +25,12 @@ public class CheckerBoard extends JPanel implements Dimensions {
     // ================================================= Constructors
 
     /**
-     * Workhorse
+     * <b>Workhorse</b> <br>
+     * <br>
      * Constructing a CheckerBoard JPanel object using all provided parameters.
      *
      * @param boardStatus 2D array holding the game's current state.
-     * @param isRedTurn turn information. true for red, and false for black.
+     * @param isRedTurn turn information. <b>true</b> for red, and <b>false</b> for black.
      */
     public CheckerBoard(char[][] boardStatus, boolean isRedTurn) {
         try {
@@ -44,32 +45,14 @@ public class CheckerBoard extends JPanel implements Dimensions {
             setLayout(new GridLayout(8,8));
             for (int row = 0; row < boardStatus.length; row++) {
                 for (int col = 0; col < boardStatus[row].length; col++) {
-                    if ((row + col) % 2 == 0) {
-                        if (boardStatus[row][col] != '_') { // White tile cannot have a piece.
-                            throw new IllegalCheckerBoardArgumentException("Illegal piece location!");
-                        }
-                    } else {
-                        switch (boardStatus[row][col]) {
-                            // Piece status cannot be other than '_', 'b', 'B', 'r', and 'R'.
-                            case 'r':
-                            case 'R':
-                                rCount++;
-                                if (redCapture(row, col)) {
-                                    capture = true;
-                                }
-                                break;
-                            case 'b':
-                            case 'B':
-                                bCount++;
-                                if (blackCapture(row, col)) {
-                                    capture = true;
-                                }
-                                break;
-                            case '_':
-                                break;
-                            default:
-                                throw new IllegalCheckerBoardArgumentException("Illegal piece location!");
-                        }
+                    int holder = isLegal(row, col, boardStatus[row][col]);
+                    switch (holder / 10) {
+                        case 0 -> throw new IllegalCheckerBoardArgumentException();
+                        case 1 -> rCount++;
+                        case 2 -> bCount++;
+                    }
+                    if (holder % 10 == 1) {
+                        capture = true;
                     }
                     pieceHolder[row * 8 + col] = new CheckerPiece(boardStatus[row][col], row, col);
                     add(pieceHolder[row * 8 + col], row * 8 + col);
@@ -87,7 +70,8 @@ public class CheckerBoard extends JPanel implements Dimensions {
     }
 
     /**
-     * Default
+     * <b>Default</b> <br>
+     * <br>
      * Constructing a default CheckerBoard JPanel.
      */
     public CheckerBoard() {
@@ -97,17 +81,45 @@ public class CheckerBoard extends JPanel implements Dimensions {
     // ================================================= Methods
 
     /**
-     * The large move() method takes in a pre-encoded 2D
-     * int[2][2] array using the following scheme:
+     * The large <code>move()</code> method takes in a pre-encoded 2D <code>int[2][2]</code>.
+     * <p>
+     *     The method checks if the move is a valid one, only
+     *     commits the move if valid, and King the piece if needed.
+     * </p>
      *
-     *    move[0] initial position    *   move[][0] row
-     *    move[1] desired position    *   move[][1] col
-     *
-     * The method checks if the move is a valid one, only
-     * commits the move if valid, and King the piece if needed.
      *
      * @param move pre-encoded 2D array.
-     * @return 1* if successful, and error codes otherwise.
+     *    <ul>
+     *             <li> <code>move[0]</code> initial position </li>
+     *             <li> <code>move[1]</code> desired position </li>
+     *             <li> <code>move[ ][0]</code> row </li>
+     *             <li> <code>move[ ][1]</code> col </li>
+     *    </ul>
+     * @return This is gonna be a mouthful!
+     *      <br>
+     *      <br>
+     *
+     *      ***** <br>
+     *      <b><i> ONE (1) DIGIT Failure codes: </i></b>
+     *      <ul>
+     *          <li> 0: Nothing to capture in the middle.</li>
+     *          <li> <i> 1: [RESERVED FOR SUCCESS CODES] </i> </li>
+     *          <li> 2: Not a diagonal move. </li>
+     *          <li> 3: Occupied destination. </li>
+     *          <li> 4: Non-King cannot move backward. </li>
+     *          <li> 5: Moving a piece without capturing. </li>
+     *          <li> 6: Cannot capture a friendly piece. </li>
+     *          <li> 9: A move larger than three blocks. </li>
+     *          <small>nice</small>.
+     *      </ul>
+     *
+     *      ***** <br>
+     *      <b><i> TWO (2) DIGITS Success codes start with 1: </i></b>
+     *      <ul>
+     *          <li> 11: Successful 1 space normal move. </li>
+     *          <li> 12: Successful 2 space capture move. </li>
+     *      </ul>
+     *
      */
     public int move(int[][] move) {
         // Current position's status
@@ -213,11 +225,66 @@ public class CheckerBoard extends JPanel implements Dimensions {
     }
 
     /**
+     * Return whether the position of a piece is legal or not.
+     * Return metadata about whether that piece can capture.
+     *
+     * @param row row of piece.
+     * @param col column of piece.
+     * @param status status of piece
+     *
+     * @return
+     *      ***** <br>
+     *      <b><i>0 if illegal.</i></b> <br>
+     *      <br>
+     *      ***** <br>
+     *      <b><i>First digit</i></b>
+     *      <ul>
+     *          <li>1 : Red  </li>   
+     *          <li>2 : Black</li>       
+     *          <li>3 : Empty</li>
+     *      </ul>
+     *      ***** <br>
+     *      <b><i>Second digit</i></b>
+     *      <ul>
+     *          <li>0: No capture  </li>   
+     *          <li>1: Has capture</li>       
+     *      </ul>
+     */
+    public int isLegal(int row, int col, char status) {
+        if ((row + col) % 2 == 0 && status != '_') {
+                return 0;
+        } else {
+            switch (status) {
+                // Piece status cannot be other than '_', 'b', 'B', 'r', and 'R'.
+                case 'r' -> {
+                    if (redCapture(row, col)) {
+                        return 11;
+                    } else {
+                        return 10;
+                    }
+                }
+                case 'b' -> {
+                    if (blackCapture(row, col)) {
+                        return 21;
+                    }
+                    return 20;
+                }
+                case '_' -> {
+                    return 30;
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
      * Check to see if there is a winner.
      *
-     * @return 'r' for red
-     *         'b' for blue
-     *         '_' for neither.
+     * @return
+     *          <li>'r' for red</li>
+     *          <li>'b' for blue</li>
+     *          <li>'_' for neither.</li>
+     *
      */
     public char isWinner() {
         // If there is no red or no black piece.
@@ -235,7 +302,7 @@ public class CheckerBoard extends JPanel implements Dimensions {
      * Check if there exists a red piece on a given board that
      * can make a capture move.
      *
-     * @return true if exists, and false otherwise.
+     * @return <b>true</b> if exists, and <b>false</b> otherwise.
      */
     public boolean checkRed() {
         for (int row = 0; row < boardStatus.length; row++) {
@@ -256,7 +323,7 @@ public class CheckerBoard extends JPanel implements Dimensions {
      * Check if a specified red piece on a given board
      * can make a capture move.
      *
-     * @return true if able, and false otherwise.
+     * @return <b>true</b> if able, and <b>false</b> otherwise.
      */
     private boolean redCapture(int row, int col) {
         boolean holder = false;
@@ -280,7 +347,7 @@ public class CheckerBoard extends JPanel implements Dimensions {
      * Check if there exists a black piece on a given board that
      * can make a capture move.
      *
-     * @return true if exists, and false otherwise.
+     * @return <b>true</b> if exists, and <b>false</b> otherwise.
      */
     public boolean checkBlack() {
         for (int row = 0; row < boardStatus.length; row++) {
@@ -301,7 +368,7 @@ public class CheckerBoard extends JPanel implements Dimensions {
      * Check if a specified black piece on a given board
      * can make a capture move.
      *
-     * @return true if able, and false otherwise.
+     * @return <b>true</b> if able, and <b>false</b> otherwise.
      */
     private boolean blackCapture(int row, int col) {
         boolean holder = false;
@@ -325,23 +392,31 @@ public class CheckerBoard extends JPanel implements Dimensions {
     // ================================================= Setters
 
     /**
-     * Change boardStatus to the provided parameter and immediately restart the game.
+     * Change <code>boardStatus</code> to the provided parameter and immediately restart the game.
      * @param boardNew the desired board.
      */
     public void setBoardStatus(char[][] boardNew, boolean isRedTurn) {
         this.boardStatus = boardNew;
         int rCount = 0;
         int bCount = 0;
-
-        for (int row = 0; row < boardStatus.length; row++) {
-            for (int col = 0; col < boardStatus[row].length; col++) {
-                pieceHolder[row * 8 + col].setPiece(
-                        row, col, boardStatus[row][col]);
-                switch (Character.toLowerCase(boardStatus[row][col])) {
-                    case 'r' -> rCount++;
-                    case 'b' -> bCount++;
+        try {
+            for (int row = 0; row < boardStatus.length; row++) {
+                for (int col = 0; col < boardStatus[row].length; col++) {
+                    int holder = isLegal(row, col, boardStatus[row][col]);
+                    switch (holder / 10) {
+                        case 0 -> throw new IllegalCheckerBoardArgumentException();
+                        case 1 -> rCount++;
+                        case 2 -> bCount++;
+                    }
+                    if (holder % 10 == 1) {
+                        capture = true;
+                    }
+                    pieceHolder[row * 8 + col].setPiece(
+                            row, col, boardStatus[row][col]);
                 }
             }
+        } catch (IllegalCheckerBoardArgumentException e) {
+            System.out.println("Not valid!");
         }
 
         this.isRedTurn = isRedTurn;

@@ -5,14 +5,14 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 /**
- *  A representation of a CheckerPiece JComponent, which extends JComponent and implements Dimensions.
+ *  A representation of a <code>CheckerPiece</code> JComponent, which extends JComponent and implements Dimensions.
  *
- *  @author Pendleton Pham
- *  phamsq
- *  CSE 271 Section E
- *  Mar 29th, 2021
- *  Project4
- *  CheckerPiece.java
+ *  @author <b>Pendleton Pham</b> <br>
+ *  phamsq <br>
+ *  CSE 271 Section E <br>
+ *  Mar 29th, 2021 <br>
+ *  Project4 <br>
+ *  CheckerPiece.java <br>
  */
 public class CheckerPiece extends JComponent implements Dimensions {
 
@@ -25,10 +25,11 @@ public class CheckerPiece extends JComponent implements Dimensions {
     // ================================================= Constructors
 
     /**
-     * Workhorse
+     * <b>Workhorse</b>
+     * <br><br>
      * Constructing a CheckerPieceComponent object using all provided parameters.
      *
-     * @param status status of piece. Uppercase if King, else lowercase.
+     * @param status status of piece, uppercase if King, else lowercase.
      * @param row row on board.
      * @param col column on board.
      */

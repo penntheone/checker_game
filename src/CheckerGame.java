@@ -24,12 +24,12 @@ import java.net.URISyntaxException;
  *  The GUI constructors and game file's driver. CheckerGame extends JFrame
  *  and implements Dimensions.
  *
- *  @author Pendleton Pham
- *  phamsq
- *  CSE 271 Section E
- *  Mar 29th, 2021
- *  Project4
- *  CheckerGame.java
+ *  @author <b>Pendleton Pham</b> <br>
+ *  phamsq <br>
+ *  CSE 271 Section E <br>
+ *  Mar 29th, 2021 <br>
+ *  Project4 <br>
+ *  CheckerGame.java <br>
  */
 public class CheckerGame extends JFrame implements Dimensions {
 
@@ -61,8 +61,9 @@ public class CheckerGame extends JFrame implements Dimensions {
     // ================================================= Constructors
 
     /**
-     * Default
-     * Empty constructor which simply calls a method. The called method constructDisplay()
+     * <b>Default</b>
+     * <br><br>
+     * Empty constructor which simply calls a method. The called method <code>constructDisplay()</code>
      * will instantiate each GUI instance property and add every element in the correct
      * order to the JPanel, and add the JPanel to the JFrame.
      */
@@ -267,7 +268,7 @@ public class CheckerGame extends JFrame implements Dimensions {
      */
     class MouseClickListener extends MouseAdapter {
         /**
-         * Large mouseClicked() method that drive interactions on click.
+         * Large <code>mouseClicked()</code> method that drive interactions on click.
          *
          * @param e mouse click.
          */
@@ -323,7 +324,7 @@ public class CheckerGame extends JFrame implements Dimensions {
                                 }, true);
                                 current.setText("Congratulations!");
                                 endGame = true;
-                                switchTurn();
+                                setMEEEEName();
                                 return;
                             }
                             case 'b' -> {
@@ -341,7 +342,7 @@ public class CheckerGame extends JFrame implements Dimensions {
                                 }, false);
                                 current.setText("Congratulations!");
                                 endGame = true;
-                                switchTurn();
+                                setMEEEEName();
                                 return;
                             }
                             default -> {
@@ -418,16 +419,25 @@ public class CheckerGame extends JFrame implements Dimensions {
                 turn.setForeground(Color.BLACK);
             }
         }
+
+        /**
+         * Change from turn indicator to developer information.
+         */
+        public void setMEEEEName() {
+            turn.setText("A game developed by Pendleton Pham. ©2021");
+            turn.setBackground(Color.BLACK);
+        }
     }
 
     // ================================================= Main
 
     /**
-     * I, Hephaestus The Lionhearted,
+     * <i>I, Pendleton The Lionhearted,
      * Henceforth Exterminate Everything Around
-     * Me That Restricts Me from Being the Master.
+     * Me That Restricts Me From Being The Master.
+     * <br><br>
      *
-     * TREMBLE IN FEAR! GRACE UNDER MY BLINDING GLORY!
+     * <b>TREMBLE IN FEAR! GRACE UNDER MY BLINDING GLORY!</b></i>
      *
      * @param args (graceful) arguments
      */
