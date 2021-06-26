@@ -205,6 +205,7 @@ public class CheckerGame extends JFrame implements Dimensions {
         add(statusArea, BorderLayout.SOUTH);
 
         setTitle("The Society for Putting Things Over Other Things");
+
         setJMenuBar(menubar);
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setResizable(false);
