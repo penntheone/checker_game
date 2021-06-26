@@ -1,31 +1,69 @@
-import javax.swing.*;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Desktop;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 /**
  *  The GUI constructors and game file's driver. CheckerGame extends JFrame
- *  and implements Dimensions
+ *  and implements Dimensions.
  *
- *  @author Pendleton Pham
- *  phamsq
- *  CSE 271 Section E
- *  Mar 29th, 2021
- *  Project4
- *  CheckerGame.java
+ *  @author <b>Pendleton Pham</b> <br>
+ *  phamsq <br>
+ *  CSE 271 Section E <br>
+ *  Mar 29th, 2021 <br>
+ *  Project4 <br>
+ *  CheckerGame.java <br>
  */
 public class CheckerGame extends JFrame implements Dimensions {
-    CheckerBoard board;
+
+    // ================================================= Variables
+
     boolean firstValidChoice;
+    boolean endGame;
     int[][] moveVar;
 
+    JPanel panel;
+    CheckerBoard board = new CheckerBoard();
+    JPanel statusArea;
+
+    JPanel statusCurrent;
+    JLabel current;
+
+    JPanel statusBoard;
+    JLabel statusRed;
+    JLabel statusBlack;
+    final JLabel separator = new JLabel(" | ");
+    JLabel turn;
+
+    JMenuBar menubar;
+    JMenu fileMenu;
+    JMenu helpMenu;
+    JDialog rulesBox;
+    JDialog aboutBox;
+
+    // ================================================= Constructors
+
     /**
-     * Default
-     * Empty constructor which simply calls a method. The called method constructDisplay()
+     * <b>Default</b>
+     * <br><br>
+     * Empty constructor which simply calls a method. The called method <code>constructDisplay()</code>
      * will instantiate each GUI instance property and add every element in the correct
      * order to the JPanel, and add the JPanel to the JFrame.
      */
@@ -33,95 +71,167 @@ public class CheckerGame extends JFrame implements Dimensions {
         constructDisplay();
     }
 
+    // ================================================= Methods
+
     /**
      * Create the GUI by instantiating all GUI elements, adding them
      * to a JPanel object, and adding the JPanel object to the JFrame.
      */
     private void constructDisplay() {
-        // Instantiate the default board.
-        board = new CheckerBoard();
+        // Instantiate needed values.
         moveVar = new int[2][2]; // A blank move array.
         firstValidChoice = false; // Keeping track if the
                                   // initial position is valid.
+        endGame = false; // Preventing input after winning.
 
-
-//        CheckerBoard.arrayToString(board.boardStatus);
-        JPanel panel = new JPanel();
-        JLabel status = new JLabel();
-        JLabel meeeee = new JLabel();
-
-        // TODO UI non-functional
-        // TODO Non-responsive clicking
-        panel.add(board);  // TODO Fix the UI drifting
-        panel.add(status); // TODO Write Status
-        panel.add(meeeee); // TODO Write my fucking Name
+        // Instantiate game board.
+        panel = new JPanel();
+        panel.add(board);
         panel.addMouseListener(new MouseClickListener());
 
-        JMenuBar menubar = new JMenuBar();
-        JMenu fileMenu = new JMenu("File");
-        JMenu helpMenu = new JMenu("Help");
-        menubar.add(fileMenu);
-        menubar.add(helpMenu);
+        // Instantiate status board.
+        statusBoard = new JPanel();
+        statusBoard.setLayout(new FlowLayout());
+        {
+            statusRed = new JLabel();
+            statusRed.setText(String.format("Red: %d", board.rCount));
+            statusRed.setForeground(Color.red);
 
-        JMenuItem newGameItem = new JMenuItem("New Game");
-        newGameItem.addActionListener(new MenuActionListener());
-        fileMenu.add(newGameItem);
+            statusBlack = new JLabel();
+            statusBlack.setText(String.format("Black: %d", board.bCount));
+            statusBlack.setForeground(Color.BLACK);
 
-        JMenuItem exitItem = new JMenuItem("Exit");
-        exitItem.addActionListener(new MenuActionListener());
-        fileMenu.add(exitItem);
+            turn = new JLabel("Black turn.");
+            turn.setForeground(Color.BLACK);
 
-        JMenuItem rulesMenu = new JMenuItem("Checker Game Rules");
-        JOptionPane rulesBox = new JOptionPane();
+            statusBoard.add(statusRed);
+            statusBoard.add(statusBlack);
+            statusBoard.add(separator);
+            statusBoard.add(turn);
+        }
 
-        JLabel rulesTitle = new JLabel(
-                "Helpful Resources");
-        JLabel rulesFirst = new JLabel(
-                "https://www.wikihow.com/Play-Checkers");
-        JLabel rulesSecond = new JLabel(
-                "https://www.youtube.com/watch?v=ScKIdStgAfU");
+        // Instantiate current operation label.
+        statusCurrent = new JPanel();
+        statusCurrent.setLayout(new FlowLayout());
+        {
+            current = new JLabel();
+            current.setText("New Game!");
+            statusCurrent.add(current);
+        }
 
-        rulesFirst.setForeground(Color.BLUE.darker());
-        rulesSecond.setForeground(Color.BLUE.darker());
-        rulesFirst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        rulesSecond.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        // Add statusCurrent and statusBoard to main statusArea
+        statusArea = new JPanel();
+        statusArea.setLayout(new BorderLayout());
+        statusArea.add(statusCurrent, BorderLayout.CENTER);
+        statusArea.add(statusBoard, BorderLayout.SOUTH);
 
-        rulesFirst.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    Desktop.getDesktop().browse(new URI(
-                            "https://www.wikihow.com/Play-Checkers"));
-                } catch (IOException | URISyntaxException e1) {
-                    e1.printStackTrace();
+        // Instantiate menu bar.
+        menubar = new JMenuBar();
+        {
+            // File menu.
+            fileMenu = new JMenu("File");
+            {
+                // New Game menu item.
+                JMenuItem newGameItem = new JMenuItem("New Game");
+                newGameItem.addActionListener(new MenuActionListener());
+                fileMenu.add(newGameItem);
+
+                // Exit menu item.
+                JMenuItem exitItem = new JMenuItem("Exit");
+                exitItem.addActionListener(new MenuActionListener());
+                fileMenu.add(exitItem);
+            }
+
+            // Help menu.
+            helpMenu = new JMenu("Help");
+            {
+                // Checker Game Rules menu item.
+                JMenuItem rulesItem = new JMenuItem("Checker Game Rules");
+                rulesItem.addActionListener(new MenuActionListener());
+                helpMenu.add(rulesItem);
+                {
+                    // Rule dialog.
+                    rulesBox = new JDialog();
+                    rulesBox.setSize(350, 110);
+                    rulesBox.setResizable(false);
+                    rulesBox.setLayout(new FlowLayout());
+                    {
+                        // First link
+                        JLabel rulesFirst = new JLabel(
+                                "https://www.wikihow.com/Play-Checkers");
+                        rulesFirst.setForeground(Color.BLUE.darker());
+                        rulesFirst.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                        rulesBox.add(rulesFirst);
+                        rulesFirst.addMouseListener(new LinkActionListener());
+
+                        // Second link
+                        JLabel rulesSecond = new JLabel(
+                                "https://www.youtube.com/watch?v=ScKIdStgAfU");
+                        rulesSecond.setForeground(Color.BLUE.darker());
+                        rulesSecond.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                        rulesSecond.addMouseListener(new LinkActionListener());
+
+                        JLabel rulesTitle = new JLabel(
+                                "Helpful Resources");
+                        rulesBox.add(rulesTitle);
+                        rulesBox.add(rulesFirst);
+                        rulesBox.add(rulesSecond);
+                    }
+                }
+
+                // About Game Rules item.
+                JMenuItem aboutItem = new JMenuItem("About");
+                aboutItem.addActionListener(new MenuActionListener());
+                helpMenu.add(aboutItem);
+                {
+                    // About dialog.
+                    aboutBox = new JDialog();
+                    aboutBox.setLayout(new BorderLayout());
+                    aboutBox.setSize(515, 215);
+                    aboutBox.setResizable(false);
+                    JLabel about = new JLabel(
+                            "<html>Created by Pendleton Pham<br>phamsq@miamioh.edu<br>CSE271 Project4<br>©2021<br><br>Please, Microsoft! Let me be your little Pog-champ! uwu</html>"
+                    );
+                    about.setHorizontalAlignment(JLabel.CENTER);
+                    aboutBox.add(about, BorderLayout.CENTER);
                 }
             }
-        });
+            menubar.add(fileMenu);
+            menubar.add(helpMenu);
+        }
 
-        rulesSecond.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                try {
-                    Desktop.getDesktop().browse(new URI(
-                            "https://www.youtube.com/watch?v=ScKIdStgAfU"));
-                } catch (IOException | URISyntaxException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
+        setLayout(new BorderLayout());
+        add(panel, BorderLayout.CENTER);
+        add(statusArea, BorderLayout.SOUTH);
 
-        rulesBox.add(rulesTitle);
-        rulesBox.add(rulesFirst);
-        rulesBox.add(rulesSecond);
+        setTitle("The Society for Putting Things Over Other Things");
 
-
-        add(panel);
         setJMenuBar(menubar);
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        setTitle("The Society for Putting Things Over Other Things");
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+
+    /**
+     * A child static class that implements the link in the resources box.
+     */
+    static class LinkActionListener extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (e.getComponent() instanceof JLabel) {
+                JLabel label = (JLabel) e.getComponent();
+                String text = label.getText();
+
+                try {
+                    Desktop.getDesktop().browse(new URI(text));
+                } catch (IOException | URISyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+    }
+
+    // ================================================= Children classes
 
     /**
      * A child class that implements the menu buttons.
@@ -129,21 +239,27 @@ public class CheckerGame extends JFrame implements Dimensions {
     class MenuActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String item = e.getActionCommand();
-            System.out.println("Action Item = " + item);
-
-            switch (item) {
-                case "Exit" -> {
-                    System.out.println("Exit called.");
-                    System.exit(0);
-                }
+            switch (e.getActionCommand()) {
+                case "Exit" -> System.exit(0);
                 case "New Game" -> {
-                    System.out.println("New Game button pressed.");
-                    board = new CheckerBoard(); // Create a new board.
+                    board.setBoardStatus(
+                            new char[][]{
+                                {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                {'b', '_', 'b', '_', 'b', '_', 'b', '_'},
+                                {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                {'_', '_', '_', '_', '_', '_', '_', '_'},
+                                {'_', '_', '_', '_', '_', '_', '_', '_'},
+                                {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
+                                {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
+                                {'r', '_', 'r', '_', 'r', '_', 'r', '_'}
+                            }, false); // Create a new board.
+                    statusRed.setText(String.format("Red: %d", board.rCount));
+                    statusBlack.setText(String.format("Black: %d", board.bCount));
+                    endGame = false;
+                    current.setText("New Game!");
                 }
-                case "Checker Game Rules" -> {
-                    
-                }
+                case "Checker Game Rules" -> rulesBox.setVisible(true);
+                case "About" -> aboutBox.setVisible(true);
             }
         }
     }
@@ -151,96 +267,180 @@ public class CheckerGame extends JFrame implements Dimensions {
     /**
      * A child class that drives mouse interactions.
      */
-    class MouseClickListener implements MouseListener {
+    class MouseClickListener extends MouseAdapter {
         /**
-         * Large mouseClicked() method that drive interactions on click.
+         * Large <code>mouseClicked()</code> method that drive interactions on click.
          *
          * @param e mouse click.
          */
         @Override
         public void mouseClicked(MouseEvent e) {
-//            System.out.println(e.getX() + " " + e.getY());
+            if (!endGame) {
+                // Converting from pixel to row and column
+                int clickRow = e.getY() / BLOCK_DIMENSION;
+                int clickCol = e.getX() / BLOCK_DIMENSION;
 
-            // Converting from pixel to row and column
-            int clickRow = e.getY() / BLOCK_DIMENSION;
-            int clickCol = e.getX() / BLOCK_DIMENSION;
-
-//            System.out.println(clickRow + " " + clickCol);
-
-            // If this is first click.
-            if (!firstValidChoice) {
-                // Only move on to second click if piece is on controlling player's turn.
-                if (board.boardStatus[clickRow][clickCol] == CheckerBoard.convert(board.isRedTurn)) {
-                    firstValidChoice = true;
-                    // Save initial location info into move array.
-                    moveVar[0][0] = clickRow;
-                    moveVar[0][1] = clickCol;
-                    System.out.println("First Click");
+                char convertFromBoolean = 'b';
+                if (board.isRedTurn) {
+                    convertFromBoolean = 'r';
                 }
-            }
-            // If this is second click.
-            else {
-                // Desired location is always valid for the purpose of verification.
-                moveVar[1][0] = clickRow;
-                moveVar[1][1] = clickCol;
 
-                System.out.println("Second Click");
+                // If this is first click.
+                if (!firstValidChoice) {
+                    // Only move on to second click if piece is on controlling player's turn.
+                    if (Character.toLowerCase(board.boardStatus[clickRow][clickCol]) == convertFromBoolean) {
+                        firstValidChoice = true;
+                        // Save initial location info into move array.
+                        moveVar[0][0] = clickRow;
+                        moveVar[0][1] = clickCol;
+                        current.setText("A valid piece selected! Pick the destination...");
+                    } else {
+                        current.setText("Not a valid selection! Try again.");
+                    }
+                }
 
-                // Attempt to move the piece.
-                if (board.move(moveVar)) {
-                    System.out.println("Success");
-                    CheckerBoard.arrayToString(board.boardStatus);
+                // If this is second click.
+                else {
+                    // Desired location is always valid for the purpose of verification.
+                    moveVar[1][0] = clickRow;
+                    moveVar[1][1] = clickCol;
 
-                    board.repaint();
-
-                    // Check if there is a winner.
-                    switch (board.isWinner()) {
-                        case 'r' -> {
-                            System.out.println("Red Wins!");
-                            board = new CheckerBoard(
-                                    Dimensions.BOARD_STATUS_RED_WINS, true, 32, 0);
+                    // Attempt to move the piece.
+                    int holder = board.move(moveVar);
+                    if (holder / 10 == 1) {
+                        // Check if there is a winner.
+                        switch (board.isWinner()) {
+                            case 'r' -> {
+                                statusRed.setText("Red Wins!");
+                                statusBlack.setText("");
+                                board.setBoardStatus(new char[][]{
+                                        {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
+                                        {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
+                                        {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
+                                        {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
+                                        {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
+                                        {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
+                                        {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
+                                        {'r', '_', 'r', '_', 'r', '_', 'r', '_'}
+                                }, true);
+                                current.setText("Congratulations!");
+                                endGame = true;
+                                setMEEEEName();
+                                return;
+                            }
+                            case 'b' -> {
+                                statusRed.setText("");
+                                statusBlack.setText("Black Wins!");
+                                board.setBoardStatus(new char[][]{
+                                        {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                        {'b', '_', 'b', '_', 'b', '_', 'b', '_'},
+                                        {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                        {'b', '_', 'b', '_', 'b', '_', 'b', '_'},
+                                        {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                        {'b', '_', 'b', '_', 'b', '_', 'b', '_'},
+                                        {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
+                                        {'b', '_', 'b', '_', 'b', '_', 'b', '_'}
+                                }, false);
+                                current.setText("Congratulations!");
+                                endGame = true;
+                                setMEEEEName();
+                                return;
+                            }
+                            default -> {
+                                statusRed.setText(String.format("Red: %d", board.rCount));
+                                statusBlack.setText(String.format("Black: %d", board.bCount));
+                                current.setText("Success!");
+                            }
                         }
-                        case 'b' -> {
-                            System.out.println("Black Wins!");
-                            board = new CheckerBoard(
-                                    Dimensions.BOARD_STATUS_BLACK_WINS, false, 0, 32);
+
+                        // Check for capture status.
+                        boolean checkRed = board.checkRed();
+                        boolean checkBlack = board.checkBlack();
+
+                        // If a 1 space move, switch turn immediately.
+                        if (holder % 10 == 1) {
+                            if (board.isRedTurn) {
+                                board.capture = checkBlack;
+                            } else {
+                                board.capture = checkRed;
+                            }
+                            switchTurn();
+                        } else {
+                            // If a 2 space capture move.
+                            if (board.isRedTurn) {
+                                if (checkRed) {
+                                    board.capture = true;
+                                    // Does not invert turn if still more capture moves.
+                                } else {
+                                    board.capture = checkBlack;
+                                    switchTurn();
+                                }
+                            } else {
+                                if (checkBlack) {
+                                    board.capture = true;
+                                    // Does not invert turn if still more capture moves.
+                                } else {
+                                    board.capture = checkRed;
+                                    switchTurn();
+                                }
+                            }
+                        }
+
+                        // Flush moveVar.
+                        moveVar = new int[2][2];
+                    } else {
+                        switch (holder) {
+                            // Print out appropriate error log.
+                            case 0 -> current.setText("Capture move with no enemies! Try again.");
+                            case 2 -> current.setText("The move is not a diagonal one! Try again.");
+                            case 3 -> current.setText("The destination is occupied! Try again.");
+                            case 4 -> current.setText("Only kings can move backwards! Try again.");
+                            case 5 -> current.setText("You have to capture! Try again.");
+                            case 6 -> current.setText("Cannot capture a friendly piece! Try again.");
+                            case 9 -> current.setText("Cannot move for more than two spaces! Try again.");
                         }
                     }
 
-                    // Flush moveVar.
-                    moveVar = new int[2][2];
-                } else {
-                    System.out.println("Failed");
+                    // Return to first click.
+                    firstValidChoice = false;
                 }
-
-                // Return to first click.
-                firstValidChoice = false;
             }
         }
 
-        @Override
-        public void mousePressed(MouseEvent e) {
+        /**
+         * Reverse turn, and change turn indicator.
+         */
+        public void switchTurn() {
+            board.isRedTurn = !board.isRedTurn;
+            if (board.isRedTurn) {
+                turn.setText("Red turn.");
+                turn.setForeground(Color.red);
+            } else {
+                turn.setText("Black turn.");
+                turn.setForeground(Color.BLACK);
+            }
         }
 
-        @Override
-        public void mouseReleased(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
+        /**
+         * Change from turn indicator to developer information.
+         */
+        public void setMEEEEName() {
+            turn.setText("A game developed by Pendleton Pham. ©2021");
+            turn.setBackground(Color.BLACK);
         }
     }
 
+    // ================================================= Main
+
     /**
-     * I Hereby Exterminate Everything Around Me
-     * That Restricts Me from Being the Master.
+     * <i>I, Pendleton The Lionhearted,
+     * Henceforth Exterminate Everything Around
+     * Me That Restricts Me From Being The Master.
+     * <br><br>
      *
-     * TREMBLE IN FEAR! GRACE UNDER MY BLINDING GLORY!
-     * @param args arguments
+     * <b>TREMBLE IN FEAR! GRACE UNDER MY BLINDING GLORY!</b></i>
+     *
+     * @param args (graceful) arguments
      */
     public static void main(String[] args) {
         JFrame checkerFrame = new CheckerGame();

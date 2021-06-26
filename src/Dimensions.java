@@ -9,14 +9,18 @@
  *  Dimensions.java
  */
 public interface Dimensions {
+
+    // ================================================= Integers
+
     int BOARD_SIZE = 8;
     int BLOCK_DIMENSION = 60;
     int PIECE_DIMENSION = 40;
-    int CROWN_DIMENSION = 10;
+    int CROWN_DIMENSION = 20;
 
     int FRAME_WIDTH = 505;
-    int FRAME_HEIGHT = 585;
+    int FRAME_HEIGHT = 590;
 
+    // ================================================= Arrays
     // The default board when starting a game.
     char[][] BOARD_STATUS_DEFAULT = {
         {'_', 'b', '_', 'b', '_', 'b', '_', 'b'},
@@ -27,29 +31,5 @@ public interface Dimensions {
         {'r', '_', 'r', '_', 'r', '_', 'r', '_'},
         {'_', 'r', '_', 'r', '_', 'r', '_', 'r'},
         {'r', '_', 'r', '_', 'r', '_', 'r', '_'}
-    };
-
-    // Board displayed when Red wins.
-    char[][] BOARD_STATUS_RED_WINS = {
-            {'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r'},
-            {'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r'},
-            {'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r'},
-            {'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r'},
-            {'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r'},
-            {'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r'},
-            {'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r'},
-            {'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r'}
-    };
-
-    // Board displayed when Black wins
-    char[][] BOARD_STATUS_BLACK_WINS = {
-            {'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'},
-            {'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'},
-            {'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'},
-            {'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'},
-            {'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'},
-            {'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'},
-            {'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'},
-            {'b', 'b', 'b', 'b', 'b', 'b', 'b', 'b'}
     };
 }

@@ -5,25 +5,31 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 
 /**
- *  A representation of a CheckerPiece JComponent, which extends JComponent and implements Dimensions.
+ *  A representation of a <code>CheckerPiece</code> JComponent, which extends JComponent and implements Dimensions.
  *
- *  @author Pendleton Pham
- *  phamsq
- *  CSE 271 Section E
- *  Mar 29th, 2021
- *  Project4
- *  CheckerPiece.java
+ *  @author <b>Pendleton Pham</b> <br>
+ *  phamsq <br>
+ *  CSE 271 Section E <br>
+ *  Mar 29th, 2021 <br>
+ *  Project4 <br>
+ *  CheckerPiece.java <br>
  */
 public class CheckerPiece extends JComponent implements Dimensions {
+
+    // ================================================= Variables
+
     int row;
     int col;
     char status;
 
+    // ================================================= Constructors
+
     /**
-     * Workhorse
+     * <b>Workhorse</b>
+     * <br><br>
      * Constructing a CheckerPieceComponent object using all provided parameters.
      *
-     * @param status status of piece. Uppercase if King, else lowercase.
+     * @param status status of piece, uppercase if King, else lowercase.
      * @param row row on board.
      * @param col column on board.
      */
@@ -32,18 +38,15 @@ public class CheckerPiece extends JComponent implements Dimensions {
         this.row = row;
         this.col = col;
     }
-    
+
+    // ================================================= Methods
+
     /**
      * {@inheritDoc}
      */
     @Override
     public void paintComponent(Graphics g) {
-        char holder = Character.toLowerCase(status); // Strip King Status
-
-        // Draw borders of tiles.
-        g.setColor(Color.black);
-        g.drawRect(row, col, BLOCK_DIMENSION, BLOCK_DIMENSION);
-
+        char holder = Character.toLowerCase(status); // Strip King Status.
         // Pick alternating white and green tile color.
         if ((row + col) % 2 == 1) {
             g.setColor(Color.green);
@@ -52,23 +55,41 @@ public class CheckerPiece extends JComponent implements Dimensions {
         }
 
         // Fill tiles.
-        g.fillRect(row, col, BLOCK_DIMENSION, BLOCK_DIMENSION);
-
-        // Fill crown if King
-        if (Character.isUpperCase(status)) {
-            g.setColor(Color.yellow);
-            g.fillOval(row + 20, col + 20, CROWN_DIMENSION, CROWN_DIMENSION);
-        }
+        g.fillRect(0, 0, BLOCK_DIMENSION, BLOCK_DIMENSION);
 
         // Pick color of piece based on side.
         if (holder == 'b') {
-            g.setColor(Color.BLACK);
+            g.setColor(Color.black);
         } else if (holder == 'r') {
             g.setColor(Color.red);
         }
 
-        // Fill pieces
-        g.fillOval(row + 10, col + 10, PIECE_DIMENSION, PIECE_DIMENSION);
+        // Fill pieces.
+        g.fillOval(10, 10, PIECE_DIMENSION, PIECE_DIMENSION);
+
+        // Fill crown if King.
+        if (Character.isUpperCase(status)) {
+            g.setColor(Color.yellow);
+            g.fillOval(20, 20, CROWN_DIMENSION, CROWN_DIMENSION);
+        }
+
+        // Draw borders of tiles.
+        g.setColor(Color.black);
+        g.drawRect(0, 0, BLOCK_DIMENSION, BLOCK_DIMENSION);
+    }
+
+    /**
+     * Set a piece at provided location with provided status.
+     *
+     * @param row row on board.
+     * @param col column on board.
+     * @param status desired status.
+     */
+    public void setPiece(int row, int col, char status) {
+        this.status = status;
+        this.row = row;
+        this.col = col;
+        repaint();
     }
 
     /**
