@@ -190,7 +190,7 @@ public class CheckerGame extends JFrame implements Dimensions {
                     aboutBox.setSize(515, 215);
                     aboutBox.setResizable(false);
                     JLabel about = new JLabel(
-                            "<html>Created by Pendleton Pham<br>phamsq@miamioh.edu<br>CSE271 Project4<br>©2021<br><br>Please, Microsoft! Let me be your little Pog-champ! uwu</html>"
+                            "<html>Created by Pendleton Pham<br>phamsq@miamioh.edu<br>CSE271 Project4<br>March, 2021<br><br>Please, Microsoft! Let me be your little Pog-champ! uwu</html>"
                     );
                     about.setHorizontalAlignment(JLabel.CENTER);
                     aboutBox.add(about, BorderLayout.CENTER);
@@ -204,7 +204,7 @@ public class CheckerGame extends JFrame implements Dimensions {
         add(panel, BorderLayout.CENTER);
         add(statusArea, BorderLayout.SOUTH);
 
-        setTitle("The Society for Putting Things Over Other Things");
+        setTitle("The Royal Society for Putting Things on Top of Other Things");
 
         setJMenuBar(menubar);
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
