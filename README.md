@@ -5,8 +5,10 @@
 
 A two-player interactive full-rule checker game based on Java. The game supports all rules of 
 checker, including queening and capturing rules, and plays until one player loses all pieces.
+<br>
 ![Demo](./demo.gif)
-Queening demo.
+<br>
+#### Queening demo.
 ![Demo2](./demo2.gif)
 
 
