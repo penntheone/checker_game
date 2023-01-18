@@ -1,5 +1,5 @@
 # Java CheckerGame
-#### Or, The Royal Society for Putting Things on Top of Other Things
+#### Or, [The Royal Society for Putting Things on Top of Other Things](https://www.youtube.com/watch?v=LFrdqQZ8FFc)
 
 #### March 29th, 2021, Freshman, by Pendleton Pham - @phamsq, for CSE 271 Honors Finals
 
